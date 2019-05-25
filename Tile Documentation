@@ -1,0 +1,106 @@
+Tile.py Documentation
+Script made by Geek_Joystick
+
+Reading Keys:
+ -() = options
+ -{} = optional options
+ -[] = comments and precisions
+
+Principal Classes:
+ -Sheet
+ -Tile
+ -MetaTile
+
+Secondary Classes:
+ -Adaptative Tile [Child of Tile, can't be used alone unless modified.]
+ -Adaptative MetaTile [Child of MetaTile.]
+ -Animated MetaTile [Child of MetaTile.]
+
+
+Sheet:
+ [This is a PRIMORDIAL class, it holds graphic data from .chr files (see
+ Sprite Editor Documentation) and draws it on a given pygame.Surface with
+ a given palette.]
+ Methods:
+
+  -self.__init__(filename)
+  [This method is the class constructor and is executed automatically, it
+  gets graphic data from the filename option, which is a file name's or
+  raw-data.]
+
+  -self.draw(surface, x, y, index, palette, {flipx=0, flipy=0, swap=0, scale=1})
+  [This method draws the tile with the number index onto the surface with the
+  given palette, optional options are flipx (flip horizontally), flipy(flip
+  vertically), swap(rotate 90°) [these three options are ONLY 1 or 0] and scale
+  (by default 1, if 0 this will draw nothing usable).]
+
+ Variables:
+  -self.data [Basically the graphic data.]
+
+
+Tile:
+ [This is more or less a data container, holding a Sheet class, position variables,
+ draw index, palette, flipping and swapping, ect., but everything this class defines
+ that's things you will not have to.]
+
+ Methods:
+  -self.__init__(x, y, sheet, palette, index, tag, {flipx=0, flipy=0, swap=0, scale=1})
+  [This method is the class constructor and is executed automatically, it retrieves all
+  given data to draw correctly and at the right position, optional options are the same
+  as the one of the Sheet.draw method]
+
+  -self.draw(surface)
+  [This method draws the tile with all the prior given data onto the given pygame.Surface]
+
+ Variables:
+  -self.x [x axis position]
+  -self.y [y axis position]
+  -self.sheet [Sheet class for drawing]
+  -self.palette [palette data for drawing]
+  -self.index [index for drawing]
+  -self.tag [for identification, used later in AdaptativeMetaTile and AdaptativeTile]
+  -self.flipx [horizontal flip]
+  -self.flipy [vertical flip]
+  -self.swap [90° rotation]
+  -self.scale [scaling factor, for drawing]
+
+MetaTile:
+ [This is a Tile container, making the process of drawing larger pictures easier to do,
+ it can potentially be of any size. It needs all the indexes, flips, and swaps of each tiles,
+ there is a method to modify these though]
+
+ Methods:
+  -self.__init__(x, y, sheet, palette, indexes, flips, size, tag, {scale=1})
+  [This method is the class constructor and is executed automatically, it retrieves all
+  given data to draw correctly and at the right position a group of Tile instances,
+  flips include flipx, flipy and swap of each tile, in the following format :
+
+  [[flipx, flipy, swap], [flipx, flipy, swap], ect.].
+
+  Each list of flips is for one tile,
+  from the top left to the top right:]
+
+  tiles
+  _____
+  |0|1|<-\
+  _____  |          flips
+  |2|3|<--- [0, 1, 2, 3, 4, 5, 6]
+  _____  |
+  |5|6|<-/
+  _____
+
+  -self.setiles(indexes, flips)
+  [replace current tile's indexes and flips with the given ones]
+
+  -self.getpalette()
+  [return current palette]
+
+  -self.setpalette(palette)
+  [replace current palette with the given one]
+
+  -self.drawtiles()
+  [pre-render the tiles, this saves processing time instead of drawing from scratch every tile
+  every frame]
+
+  -self.draw(surface)
+  [draw the pre-rendered tiles onto the surface]
