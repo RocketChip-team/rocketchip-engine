@@ -81,9 +81,14 @@ class AdaptiveTile(Tile):#an alternative of the tile class, an adaptative one! d
         self.index = self.rules[tiling]
         x = ((posx*-1)-1)//-2
         y = ((posy*-1)-1)//-2
-        self.flipx = self.posrules[self.index][y*2+x][0]
-        self.flipy = self.posrules[self.index][y*2+x][1]
-        self.swap = self.posrules[self.index][y*2+x][2]
+        if self.posrules[y*2+x].__class__.__name__ == "list":
+            self.flipx = self.posrules[self.index][y*2+x][0]
+            self.flipy = self.posrules[self.index][y*2+x][1]
+            self.swap = self.posrules[self.index][y*2+x][2]
+        elif self.posrules[y*2+x].__class__.__name__ == "int":
+            self.flipx = (self.posrules[y*2+x] & 4) // 4
+            self.flipy = (self.posrules[y*2+x] & 2) // 2
+            self.swap = (self.posrules[y*2+x] & 1)
 
     def draw(self, surface):#draw method yaaay
         Tile.draw(self, surface)
@@ -99,9 +104,14 @@ class MetaTile:#the basic metatile class, can be of any size
         for t in range(0, size[1]):#creating basic tiling
             for s in range(0, size[0]):
                 self.tiles.append(Tile((8*s*scale), (8*t*scale), sheet, palette, indexes[t*size[0]+s], tag, scale=scale))
-                self.tiles[t*size[0]+s].flipx = flips[t*size[0]+s][0]
-                self.tiles[t*size[0]+s].flipy = flips[t*size[0]+s][1]
-                self.tiles[t*size[0]+s].swap = flips[t*size[0]+s][2]
+                if flips[t*size[0]+s].__class__.__name__ == "list":
+                    self.tiles[t*size[0]+s].flipx = flips[t*size[0]+s][0]
+                    self.tiles[t*size[0]+s].flipy = flips[t*size[0]+s][1]
+                    self.tiles[t*size[0]+s].swap = flips[t*size[0]+s][2]
+                elif flips[t*size[0]+s].__class__.__name__ == "int":
+                    self.tiles[t * size[0] + s].flipx = (flips[t * size[0] + s]&4)//4
+                    self.tiles[t * size[0] + s].flipy = (flips[t * size[0] + s]&2)//2
+                    self.tiles[t * size[0] + s].swap = (flips[t * size[0] + s]&1)
         self.size = size
         self.drawtiles()#pre-render tiles
 
@@ -255,9 +265,9 @@ if __name__ == "__main__":#technical demo code, just for showing off a bit of po
     scale=2
     display = pygame.display.set_mode((25*16*scale, 20*16*scale))
     screen = []
-    posrules = [[[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 0]],
-                [[0, 0, 0], [0, 0, 0], [0, 1, 0], [0, 1, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
-                [[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 0]], [[0, 0, 0], [1, 0, 0], [0, 0, 0], [1, 0, 0]]]
+    posrules = [[0, 0, 0, 0], [0, 4, 2, 6],
+                [0, 0, 2, 2], [0, 0, 0, 0],
+                [0, 4, 2, 6], [0, 4, 0, 4]]
     rules = [1, 5, 1, 5, 2, 4, 2, 3]
     palette = [(0, 0, 0), (255, 255, 255), (225, 255, 225), (200, 255, 200), (100, 255, 100), (150, 255, 150)]
     rpalette = [(0, 0, 0), (255, 255, 255), (255, 225, 225), (255, 200, 200), (255, 100, 100), (255, 150, 150)]
@@ -267,7 +277,7 @@ if __name__ == "__main__":#technical demo code, just for showing off a bit of po
         for x in range(0, 27):
             screen[y].append(AdaptiveMetaTile((x-1)*16*scale, (y-1)*16*scale, sheet, rpalette, [0, 0, 0, 0, 0, 0, 0, 0], posrules, " ", scale=scale))
     animmetatile = AnimatedMetaTile(0, 8*scale, sheet, palette, (2, 3), "p", 6, swap=1, flipy=1, flipx=1, scale=scale)
-    metatile = MetaTile(23*8*scale, 8*scale, sheet, bpalette, [1, 2, 1, 1, 2, 1], [[0, 0, 0], [0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 1, 0], [1, 1, 0]], (3, 2), "e", scale=scale)
+    metatile = MetaTile(23*8*scale, 8*scale, sheet, bpalette, [1, 2, 1, 1, 2, 1], [0, 0, 4, 2, 2, 6], (3, 2), "e", scale=scale)
     animmetatile.addframe([[6, 7], [8, 9], [10, 11]])
     animmetatile.addframe([[12, 13], [14, 15], [16, 17]])
     animmetatile.addframe([[18, 13], [14, 15], [16, 17]])

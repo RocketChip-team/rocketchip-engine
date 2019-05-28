@@ -103,4 +103,7 @@ MetaTile:
   every frame]
 
   -self.draw(surface)
-  [draw the pre-rendered tiles onto the surface]
+  [draw the pre-rendered tiles onto the given surface]
+
+ Variables:
+  -self.x [
