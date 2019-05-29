@@ -119,9 +119,14 @@ class MetaTile:#the basic metatile class, can be of any size
         for t in range(0, self.size[1]):
             for s in range(0, self.size[0]):
                 self.tiles[t*self.size[0]+s].index = indexes[t*self.size[0]+s]
-                self.tiles[t*self.size[0]+s].flipx = flips[t*self.size[0]+s][0]
-                self.tiles[t*self.size[0]+s].flipy = flips[t*self.size[0]+s][1]
-                self.tiles[t*self.size[0]+s].swap = flips[t*self.size[0]+s][2]
+                if flips[t * size[0] + s].__class__.__name__ == "list":
+                    self.tiles[t * size[0] + s].flipx = flips[t * size[0] + s][0]
+                    self.tiles[t * size[0] + s].flipy = flips[t * size[0] + s][1]
+                    self.tiles[t * size[0] + s].swap = flips[t * size[0] + s][2]
+                elif flips[t * size[0] + s].__class__.__name__ == "int":
+                    self.tiles[t * size[0] + s].flipx = (flips[t * size[0] + s] & 4) // 4
+                    self.tiles[t * size[0] + s].flipy = (flips[t * size[0] + s] & 2) // 2
+                    self.tiles[t * size[0] + s].swap = (flips[t * size[0] + s] & 1)
 
     def getpalette(self):#gets the palette of the tiles
         return self.tiles[0].palette
