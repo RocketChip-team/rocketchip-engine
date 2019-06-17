@@ -1,3 +1,5 @@
+import os
+import pygame
 class MButton:
 	def __init__(self, x, y, w, h, tag, function):
 		self.coords = (x, y, w, h)
@@ -229,8 +231,6 @@ class Main:
 		pygame.display.update()
 
 if __name__ == "__main__":
-	import os
-	import pygame
 	from tkinter import *
 	from tkinter import filedialog
 	Main(((0, 0, 0), (255, 255, 255), (173, 173, 173), (81, 81, 81), (0, 0, 255), (255, 255, 0), (0, 255, 255), (255, 0, 255)))
