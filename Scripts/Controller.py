@@ -22,7 +22,6 @@ class Controller:#key input manager, it can allow for object control assignement
             self.controltags.pop(name)
 
     def update(self, events):#update the keys' states with a given "pygame.EventList" object
-
         for event in events:#for each event in the given list
             #event types are checked in int so that we don't have to import the pygame library for this class
 

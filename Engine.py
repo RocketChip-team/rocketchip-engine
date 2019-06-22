@@ -1,48 +1,56 @@
 #! /usr/bin/python2
 import pygame
 from Scripts.Tile import *
+from Scripts.Controller import *
+from Scripts.GameObject import *
 
 class Game:
-    def __init__(self, width, ratio, background, fps, title):
-        self.WIDTH = width
-        self.HEIGHT = int(width*ratio)
+    def __init__(self, width, ratio, background, fps, title, sheet, scale=1):
+        self.WIDTH = width*scale
+        self.HEIGHT = int(width*ratio)*scale
         self.BACKGROUND = background
         self.RUNNING = True
         self.FPS = fps
         self.TITLE = title
-        self.sheet = Sheet("bank1.chr")
+        self.sheet = sheet
+        self.controller = Controller(0)
 
         pygame.init()
+        self.scale = scale
         self.display = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
+        self.render = pygame.Surface((self.WIDTH//scale, self.HEIGHT//scale))
         pygame.display.set_caption(self.TITLE)
 
         self.levents = pygame.event.get()
         self.clock = pygame.time.Clock()
+        self.objectlist = []
 
-        while self.RUNNING:
-            self.events()
-            self.update()
-            self.draw()
+    def add_object(self, object):
+        self.objectlist.append(object)
 
     def events(self):
         self.levents = pygame.event.get()
         for event in self.levents:
             if event.type == pygame.QUIT:
                 self.RUNNING = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    self.RUNNING = False
+        self.controller.update(self.levents)
+        if self.controller.get_press("escape"):
+            self.RUNNING = False
 
     def update(self):
-        pass
+        for i in range(len(self.objectlist)):
+            self.objectlist[i].update(self)
 
     def draw(self):
-        self.display.fill(self.BACKGROUND)
+        self.render.fill(self.BACKGROUND)
+        for i in range(len(self.objectlist)):
+            self.objectlist[i].draw(self.render)
+        self.display.blit(pygame.transform.scale(self.render, (self.WIDTH, self.HEIGHT)), (0, 0))
         pygame.display.update()
         self.clock.tick(self.FPS)
 
 
 if __name__ == "__main__":
-    game = Game(600, 9/16.0, (0, 0, 0), 60, "Pygame Boilerplate")
+    game = Game(25*16, 4/5.0, (0, 0, 0), 60, "Pygame Boilerplate")
     pygame.quit()
     quit()
