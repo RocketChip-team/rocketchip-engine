@@ -1,5 +1,19 @@
 import pygame, random, math
 #sprite editor furnished with this program
+
+def pal_load(filename):#load a palette
+    temp = []
+    try:
+        file = open(filename, "r").read()
+    except:
+        pass
+    else:
+        for y in range(0, 8):
+            temp.append((int(file[y * 9 + 0:y * 9 + 0 + 3]), int(file[y * 9 + 3:y * 9 + 3 + 3]),
+                         int(file[y * 9 + 6:y * 9 + 6 + 3])))
+        return temp
+    return None
+
 class Sheet:#graphics holder and drawer class
     def __init__(self, filename):
         if filename[-4:] == ".chr":#checks if you give it a filename or raw data

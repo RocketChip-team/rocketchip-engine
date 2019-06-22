@@ -87,7 +87,8 @@ class Main:
 
 	def pal(self):
 		root = Tk()
-		file = filedialog.askopenfile(initialdir=os.getcwd(),title='Choose a Palette file',filetypes=(("PAL files", "*.pal"), ("All files", "*.*")))
+		file = filedialog.askopenfile(initialdir=os.getcwd(), title='Choose a Palette file',
+									  filetypes=(("PAL files", "*.pal"), ("All files", "*.*")))
 		root.destroy()
 		try:
 			data = file.read()
@@ -95,15 +96,10 @@ class Main:
 		except:
 			pass
 		else:
-			pale = []
-			for i in range (0,len(data)):
-				pale.append(int(data[i]))
 			temp = []
-			for i in range(0,len(pale),9):
-				temp.append([])
-				temp[int(i/9)].append(pale[i]*100+pale[i+1]*10+pale[i+2])
-				temp[int(i/9)].append(pale[i+3]*100+pale[i+4]*10+pale[i+5])
-				temp[int(i/9)].append(pale[i+6]*100+pale[i+7]*10+pale[i+8])
+			for y in range(0, 8):
+				temp.append((int(data[y * 9 + 0:y * 9 + 0 + 3]), int(data[y * 9 + 3:y * 9 + 3 + 3]),
+							 int(data[y * 9 + 6:y * 9 + 6 + 3])))
 			return temp
 
 	def handler(self):
