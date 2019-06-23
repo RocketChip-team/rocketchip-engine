@@ -51,6 +51,6 @@ class Game:
 
 
 if __name__ == "__main__":
-    game = Game(25*16, 4/5.0, (0, 0, 0), 60, "Pygame Boilerplate")
+    game = Game(25*16, 4/5.0, (0, 0, 0), 60, "Pygame Boilerplate", Sheet("bank1.chr"))
     pygame.quit()
     quit()
