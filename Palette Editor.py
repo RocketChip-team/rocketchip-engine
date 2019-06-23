@@ -51,11 +51,12 @@ class Main:
         self.handler()
 
     def color(self):
-        print("ok")
         root = Tk()
         color = tkcp.askcolor(color="red", parent=None, title=("Choose Color"), alpha=False)
         root.destroy()
-        return color[0]
+        if not color[0] == None:
+            return color[0]
+        return 0
 
     def save(self):
         root = Tk()
@@ -126,8 +127,7 @@ class Main:
                             self.palette = palr
                     for i in range(0, 8):
                         color = self.btn_colors[i].update(event.pos)
-                        if not color == 0:
-                            print("okay")
+                        if color:
                             self.data[i] = color
             if event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1:
