@@ -2,10 +2,10 @@ import pygame
 
 
 class FogLight:
-    def __init__(self, object, radius, intensity):
+    def __init__(self, object, radius):
         self.object = object
         self.radius = radius
-        self.intensity = intensity
+        self.intensity = 255
         self.surface = pygame.Surface((radius*2, radius*2), pygame.SRCALPHA)
 
     def draw(self, surface):
