@@ -1,6 +1,5 @@
 from Scripts.Tile import *
 
-
 class GameObject:
     def __init__(self, x, y, sheet, palette, gravity, size, animated, tag, behaviours, latency=5):
         self.x = x
@@ -21,9 +20,10 @@ class GameObject:
             self.sprite = MetaTile(0, 0, sheet, palette, indexes, flips, size, tag)
         self.colliders = []
         self.controller = None
+        self.light = None
         self.behaviours = behaviours
         self.behnames = self.behaviours.keys()
-        self.surface = pygame.Surface((size[0]*8, size[1]*8))
+        self.surface = pygame.Surface((size[0]*8, size[1]*8), pygame.SRCALPHA)
 
     def add_behaviour(self, name, behaviour):
         self.behaviours[name] = behaviour
@@ -36,6 +36,8 @@ class GameObject:
             self.colliders.update(game)
         for i in self.behnames:
             exec(self.behaviours[i])
+        if self.light:
+            self.light.draw(game.fog)
 
     def draw(self, surface):
         self.sprite.draw(self.surface)

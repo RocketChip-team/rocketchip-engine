@@ -3,16 +3,11 @@ import pygame, random, math
 
 def pal_load(filename):#load a palette
     temp = []
-    try:
-        file = open(filename, "r").read()
-    except:
-        pass
-    else:
-        for y in range(0, 8):
-            temp.append((int(file[y * 9 + 0:y * 9 + 0 + 3]), int(file[y * 9 + 3:y * 9 + 3 + 3]),
-                         int(file[y * 9 + 6:y * 9 + 6 + 3])))
-        return temp
-    return None
+    file = open(filename, "r").read()
+    for y in range(0, 8):
+        temp.append((int(file[y * 9 + 0:y * 9 + 0 + 3]), int(file[y * 9 + 3:y * 9 + 3 + 3]),
+                     int(file[y * 9 + 6:y * 9 + 6 + 3])))
+    return temp
 
 class Sheet:#graphics holder and drawer class
     def __init__(self, filename):
@@ -152,7 +147,6 @@ class MetaTile:#the basic metatile class, can be of any size
         self.drawtiles()
 
     def drawtiles(self):#pre-render tiles
-        self.surface.fill((0, 0, 0, 255))
         self.surface.fill((0, 0, 0, 0))
         for i in range(len(self.tiles)):
             self.tiles[i].draw(self.surface)

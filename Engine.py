@@ -1,8 +1,10 @@
 #! /usr/bin/python2
 import pygame
+import copy
 from Scripts.Tile import *
 from Scripts.Controller import *
 from Scripts.GameObject import *
+from Scripts.FogLight import *
 
 class Game:
     def __init__(self, width, ratio, background, fps, title, sheet, scale=1):
@@ -14,11 +16,13 @@ class Game:
         self.TITLE = title
         self.sheet = sheet
         self.controller = Controller(0)
+        self.fog_instensity = 0
 
         pygame.init()
         self.scale = scale
-        self.display = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
-        self.render = pygame.Surface((self.WIDTH//scale, self.HEIGHT//scale))
+        self.display = pygame.display.set_mode((self.WIDTH, self.HEIGHT), pygame.SRCALPHA)
+        self.render = pygame.Surface((self.WIDTH//scale, self.HEIGHT//scale), pygame.SRCALPHA)
+        self.fog = pygame.Surface((self.WIDTH//scale, self.HEIGHT//scale), pygame.SRCALPHA)
         pygame.display.set_caption(self.TITLE)
 
         self.levents = pygame.event.get()
@@ -38,6 +42,7 @@ class Game:
             self.RUNNING = False
 
     def update(self):
+        self.fog.fill((0, 0, 0, self.fog_instensity))
         for i in range(len(self.objectlist)):
             self.objectlist[i].update(self)
 
@@ -46,6 +51,7 @@ class Game:
         for i in range(len(self.objectlist)):
             self.objectlist[i].draw(self.render)
         self.display.blit(pygame.transform.scale(self.render, (self.WIDTH, self.HEIGHT)), (0, 0))
+        self.display.blit(pygame.transform.scale(self.fog, (self.WIDTH, self.HEIGHT)), (0, 0))
         pygame.display.update()
         self.clock.tick(self.FPS)
 
