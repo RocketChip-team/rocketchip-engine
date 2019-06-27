@@ -1,7 +1,4 @@
 #! /usr/bin/python2
-import pygame
-import copy
-from Scripts.Tile import *
 from Scripts.Controller import *
 from Scripts.GameObject import *
 from Scripts.FogLight import *

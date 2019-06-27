@@ -46,6 +46,9 @@ class Sheet:#graphics holder and drawer class
                         t = -t
                 if self.data[int((index & 240) / 2)+7*l+ t][int((index & 15) * 8)+7*f+ s] > 0:#the code is separating the upper index nibble from
                     surf.set_at((b, a), palette[self.data[int((index & 240) / 2)+7*l+ t][int((index & 15) * 8)+7*f+ s]])#the lower and gets pixel data with it
+                else:
+                    surf.set_at((b, a), (0,0,0,0))#the lower and gets pixel data with it
+
         surface.blit(surf, (x, y))#blits the temporary surface to the given surface as well as scaling it up, for speed
 
 class Tile:#Basic tile class, a tile can ONLY be 8x8 pixels
@@ -233,8 +236,8 @@ class AnimatedMetaTile(MetaTile):#an animated metatile, can be of any size
             self.latency = 0
 
     def drawtiles(self):#modified pre-render function, with flipping and ect
-        self.surface.fill((0, 0, 0, 255))
         self.surface.fill((0, 0, 0, 0))
+        self.surface.fill((0, 0, 0, 255))
         if not self.swap == self.oldswap:
             self.surface = pygame.Surface((8*self.size[self.swap]*scale, 8*self.size[~self.swap&1]*scale), pygame.SRCALPHA)
             self.oldswap = self.swap
@@ -277,7 +280,7 @@ class AnimatedMetaTile(MetaTile):#an animated metatile, can be of any size
 if __name__ == "__main__":#technical demo code, just for showing off a bit of possibilities
     #no I won't comment that, I don't want to.
     pygame.init()
-    sheet = Sheet("bank1.chr")
+    sheet = Sheet("Sheets/bank1.chr")
     scale=2
     display = pygame.Surface((25*16, 20*16))
     window = pygame.display.set_mode((25*16*scale, 20*16*scale))

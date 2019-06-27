@@ -1,4 +1,3 @@
-import Tile
 import unittest
 
 class TestSpriteEditorMethods(unittest.TestCase):
