@@ -9,7 +9,7 @@ class GameObject:
         self.vy = 0
         self.animated = animated
         if animated == True:
-            self.sprite = AnimatedMetaTile(0, 0, sheet, palette, size, tag, latency, flipx=0, flipy=0, swap=0)
+            self.sprite = AnimatedMetaTile(0, 0, sheet, palette, size, "p", latency, swap=0, flipy=0, flipx=0)
         else:
             indexes = []
             flips = []
@@ -40,5 +40,6 @@ class GameObject:
             self.light.draw(game.fog)
 
     def draw(self, surface):
+        self.surface.fill((0,0,0,0))
         self.sprite.draw(self.surface)
         surface.blit(self.surface, (self.x, self.y))

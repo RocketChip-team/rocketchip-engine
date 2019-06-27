@@ -44,10 +44,7 @@ class Sheet:#graphics holder and drawer class
                         s = -s
                     if flipy:
                         t = -t
-                if self.data[int((index & 240) / 2)+7*l+ t][int((index & 15) * 8)+7*f+ s] > 0:#the code is separating the upper index nibble from
-                    surf.set_at((b, a), palette[self.data[int((index & 240) / 2)+7*l+ t][int((index & 15) * 8)+7*f+ s]])#the lower and gets pixel data with it
-                else:
-                    surf.set_at((b, a), (0,0,0,0))#the lower and gets pixel data with it
+                surf.set_at((b, a), palette[self.data[int((index & 240) / 2)+7*l+ t][int((index & 15) * 8)+7*f+ s]])#the lower and gets pixel data with it
 
         surface.blit(surf, (x, y))#blits the temporary surface to the given surface as well as scaling it up, for speed
 
@@ -111,7 +108,8 @@ class MetaTile:#the basic metatile class, can be of any size
         self.y = y
         self.tiles = []
         self.scale = 1
-        self.surface = pygame.Surface((8*size[0], 8*size[1]), pygame.SRCALPHA)
+        self.surface = pygame.Surface((8*size[0], 8*size[1]), pygame.SRCCOLORKEY)
+        self.surface.set_colorkey(palette[0])
         self.tag = tag
         for t in range(0, size[1]):#creating basic tiling
             for s in range(0, size[0]):
@@ -236,10 +234,9 @@ class AnimatedMetaTile(MetaTile):#an animated metatile, can be of any size
             self.latency = 0
 
     def drawtiles(self):#modified pre-render function, with flipping and ect
-        self.surface.fill((0, 0, 0, 0))
         self.surface.fill((0, 0, 0, 255))
         if not self.swap == self.oldswap:
-            self.surface = pygame.Surface((8*self.size[self.swap]*scale, 8*self.size[~self.swap&1]*scale), pygame.SRCALPHA)
+            self.surface = pygame.Surface((8*self.size[self.swap], 8*self.size[~self.swap&1]), pygame.SRCALPHA)
             self.oldswap = self.swap
         for y in range(0, self.size[1]):
             for x in range(0, self.size[0]):
