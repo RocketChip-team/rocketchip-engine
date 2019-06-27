@@ -6,12 +6,11 @@ if self.controller:
     else:
         self.vx = 0
 
-    if self.controller.get_hold("up"):
-        self.vy = -2
-    elif self.controller.get_hold("down"):
-        self.vy = 2
-    else:
-        self.vy = 0
+    if self.controller.get_press("up"):
+        self.vy = -5
+if self.y > game.width:
+    self.vy = -10
 
 self.x += self.vx
 self.y += self.vy
+self.vy += game.gravity

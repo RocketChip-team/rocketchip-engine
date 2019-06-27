@@ -4,9 +4,11 @@ from Scripts.GameObject import *
 from Scripts.FogLight import *
 
 class Game:
-    def __init__(self, width, ratio, background, fps, title, sheet, scale=1):
-        self.WIDTH = width*scale
-        self.HEIGHT = int(width*ratio)*scale
+    def __init__(self, width, ratio, background, fps, title, sheet, scale=1, gravity=0):
+        self.width = width
+        self.height = int(width*ratio)
+        self.WIDTH = self.width * scale
+        self.HEIGHT = self.height * scale
         self.BACKGROUND = background
         self.RUNNING = True
         self.FPS = fps
@@ -14,12 +16,13 @@ class Game:
         self.sheet = sheet
         self.controller = Controller(0)
         self.fog_instensity = 0
+        self.gravity = gravity
 
         pygame.init()
         self.scale = scale
         self.display = pygame.display.set_mode((self.WIDTH, self.HEIGHT), pygame.SRCALPHA)
-        self.render = pygame.Surface((self.WIDTH//scale, self.HEIGHT//scale), pygame.SRCALPHA)
-        self.fog = pygame.Surface((self.WIDTH//scale, self.HEIGHT//scale), pygame.SRCALPHA)
+        self.render = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
+        self.fog = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
         pygame.display.set_caption(self.TITLE)
 
         self.levents = pygame.event.get()

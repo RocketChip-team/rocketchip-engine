@@ -1,10 +1,11 @@
+from copy import copy
 from Scripts.Tile import *
 
+
 class GameObject:
-    def __init__(self, x, y, sheet, palette, gravity, size, animated, tag, behaviours, latency=5):
+    def __init__(self, x, y, sheet, palette, size, animated, tag, behaviours, latency=5):
         self.x = x
         self.y = y
-        self.gravity = gravity
         self.vx = 0
         self.vy = 0
         self.animated = animated
@@ -28,6 +29,17 @@ class GameObject:
     def add_behaviour(self, name, behaviour):
         self.behaviours[name] = behaviour
         self.behnames.append(name)
+
+    def rem_behaviour(self, name):
+        self.behaviours.pop(name)
+        self.behnames.remove(name)
+
+    def duplicate(self):
+        return copy(self)
+
+    def set_coords(self, coords):
+        self.x = coords[0]
+        self.y = coords[1]
 
     def update(self, game):
         if self.controller:
