@@ -1,5 +1,5 @@
 from copy import copy
-from Scripts.Tile import *
+from Tile import *
 
 
 class GameObject:

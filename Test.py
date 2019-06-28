@@ -2,7 +2,7 @@ from Engine import *
 
 if __name__ == "__main__":
     sheet = Sheet("Sheets/bank1.chr")
-    game = Game(25*16, 4/5.0, (255, 255, 255), 60, "Pygame Boilerplate", sheet, scale=2, gravity=.2)
+    game = Game(25*16, 4/5.0, (255, 255, 255), 60, "Pygame Boilerplate", sheet, scale=2, gravity=.2 )
     game.fog_instensity = 255
     palette = pal_load("Palettes/palette.pal")
     torchpal = pal_load("Palettes/torch.pal")
