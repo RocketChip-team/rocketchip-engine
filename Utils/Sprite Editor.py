@@ -54,7 +54,7 @@ class Main:
 			for y in range(0, len(self.data)):
 				for x in range(0, len(self.data[y])):
 					file.write(str(self.data[y][x]))
-			file.write("this data and the programs associated with it are made by Geek_Joystick, DON'T STEAL THEM, and credit me")
+			file.write("this data and the programs associated with it are made by Team Rocket Chip, DON'T STEAL THEM, and credit me")
 		except:
 			pass
 	def new(self):
