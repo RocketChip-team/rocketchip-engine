@@ -32,7 +32,7 @@ class Manager():
 
     def status(self):
         currentDT = datetime.datetime.now()
-        print("Status :")
+        print("Status :") #The aperture logo will change in the final release
         print("""
               \033[33;1m.,-:;//;:=,\033[0m                \033[7m  Pygine Terminal Info                \033[0m
           \033[33;1m. :H@@@MM@M#H/.,+%;,\033[0m           
