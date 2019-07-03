@@ -10,6 +10,73 @@ project_version = "v 0.1"
 is_project_tested = "\033[31;1mNo\033[33;0m"
 is_project_debug = "\033[31;1mTrue\033[33;0m"
 
+Engine = """#! /usr/bin/python3
+from Scripts.Controller import *
+from Scripts.GameObject import *
+from Scripts.FogLight import *
+
+class Game:
+    def __init__(self, width, ratio, background, fps, title, sheet, scale=1, gravity=0):
+        self.width = width
+        self.height = int(width*ratio)
+        self.WIDTH = self.width * scale
+        self.HEIGHT = self.height * scale
+        self.BACKGROUND = background
+        self.RUNNING = True
+        self.FPS = fps
+        self.TITLE = title
+        self.sheet = sheet
+        self.controller = Controller(0)
+        self.fog_instensity = 0
+        self.gravity = gravity
+
+        pygame.init()
+        self.scale = scale
+        self.display = pygame.display.set_mode((self.WIDTH, self.HEIGHT), pygame.SRCALPHA)
+        self.render = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
+        self.fog = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
+        pygame.display.set_caption(self.TITLE)
+
+        self.levents = pygame.event.get()
+        self.clock = pygame.time.Clock()
+        self.objectlist = []
+
+    def add_object(self, object):
+        self.objectlist.append(object)
+
+    def events(self):
+        self.levents = pygame.event.get()
+        for event in self.levents:
+            if event.type == pygame.QUIT:
+                self.RUNNING = False
+        self.controller.update(self.levents)
+        if self.controller.get_press("escape"):
+            self.RUNNING = False
+
+    def update(self):
+        self.fog.fill((0, 0, 0, self.fog_instensity))
+        for i in range(len(self.objectlist)):
+            self.objectlist[i].update(self)
+
+    def draw(self):
+        self.render.fill(self.BACKGROUND)
+        for i in range(len(self.objectlist)):
+            self.objectlist[i].draw(self.render)
+        self.display.blit(pygame.transform.scale(self.render, (self.WIDTH, self.HEIGHT)), (0, 0))
+        self.display.blit(pygame.transform.scale(self.fog, (self.WIDTH, self.HEIGHT)), (0, 0))
+        pygame.display.update()
+        self.clock.tick(self.FPS)
+
+
+if __name__ == "__main__":
+    game = Game(25*16, 4/5.0, (0, 0, 0), 60, "Pygame Boilerplate", Sheet("bank1.chr"))
+    pygame.quit()
+    quit()
+"""
+
+Default_file = """import Engine.py
+"""
+
 def getRAMinfo():
     try:
         p = os.popen('free')
@@ -57,7 +124,7 @@ class Manager():
 """)
 
     def startproject(self):
-        self.project_name = input("Project name :")
+        self.project_name = input("Project name : ")
         self.utils = input("Do you want to enable utils for creating 8-bit Sprites and palletes? (y/n): ")
         if self.utils.lower() == "y":
             self.utils = True
@@ -70,6 +137,12 @@ class Manager():
         os.mkdir(self.project_name+"/Behaviours")
         if self.utils == True:
             os.mkdir(self.project_name+"/Utils")
+        with open(self.project_name + "/Engine.py", "w") as engine:
+            engine.write(Engine)
+        with open(self.project_name + "/"+self.project_name+".py", "w") as default_file:
+            default_file.write(Default_file)
+        with open(self.project_name + "/README.md", "w") as readme:
+            readme.write("Readme for "+self.project_name)
 
     
     def shell(self):
@@ -95,6 +168,9 @@ class Manager():
         print('manage.py v O.1')
         print('Usage : python3 manage.py <command> <args> [--verbose]')
 
+    def make_executable(self):
+        pass
+
     def execute(self):
         try:
             self.subcommand = self.argv[1]
@@ -116,6 +192,6 @@ class Manager():
         except IndexError:
             self.short_help()
 
-if __name__ ="__name__"
-manager = Manager(sys.argv)
-manager.execute()
+if __name__ == "__main__":
+    manager = Manager(sys.argv)
+    manager.execute()
