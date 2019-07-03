@@ -9,6 +9,19 @@ def pal_load(filename):#load a palette
                      int(file[y * 9 + 6:y * 9 + 6 + 3])))
     return temp
 
+tile_rules = {"wtop":[[[0, 4, 0, 0], [0, 4, 2, 6],
+                [0, 0, 2, 2], [0, 0, 0, 0],
+                [0, 4, 2, 6], [0, 0, 0, 4],
+                [0, 4, 0, 4], [0, 4, 0, 4],
+                [0, 4, 0, 4]], [[0, 4, 0, 4, 1, 3, 1, 2], [0, 4, 0, 4, 1, 5, 1, 2],
+             [6, 4, 6, 4, 7, 8, 7, 2], [6, 4, 6, 4, 7, 8, 7, 2]]], "plain":
+    [[[0, 4, 0, 0], [0, 4, 2, 6],
+                [0, 0, 2, 2], [0, 0, 0, 0],
+                [0, 4, 2, 6], [0, 4, 0, 4]], [1, 5, 1, 5, 2, 4, 2, 3]], "block":
+    [[[0, 4, 2, 6], [0, 4, 2, 6],
+                [0, 4, 2, 6], [0, 4, 2, 6],
+                [0, 4, 2, 6]], [0, 0, 0, 0, 0, 0, 0, 0]]}
+
 class Sheet:#graphics holder and drawer class
     def __init__(self, filename):
         if filename[-4:] == ".chr":#checks if you give it a filename or raw data
@@ -88,7 +101,7 @@ class AdaptiveTile(Tile):#an alternative of the tile class, an adaptative one! d
                 tiling += 4
         except:
             pass
-        self.index = self.rules[tiling]
+        self.index = self.rules[tiling]+self.origin
         x = ((posx*-1)-1)//-2
         y = ((posy*-1)-1)//-2
         if self.posrules[y*2+x].__class__.__name__ == "list":
@@ -163,7 +176,6 @@ class AdaptiveMetaTile(MetaTile):#adaptative metatile, ya know, the daddy of the
         for t in range(0, 2):
             for s in range(0, 2):
                 if rules[0].__class__.__name__ == "list":
-                    print(rules[t*2+s])
                     self.tiles.append(AdaptiveTile((4*s*scale), (4*t*scale), sheet, palette, rules[t*2+s], posrules, tag, origin))
                 else:
                     self.tiles.append(AdaptiveTile((4*s*scale), (4*t*scale), sheet, palette, rules, posrules, tag, origin))
@@ -287,20 +299,14 @@ if __name__ == "__main__":#technical demo code, just for showing off a bit of po
     display = pygame.Surface((25*16, 20*16))
     window = pygame.display.set_mode((25*16*scale, 20*16*scale))
     screen = []
-    posrules = [[0, 4, 0, 0], [0, 0, 2, 6],
-                [0, 0, 2, 2], [0, 0, 0, 0],
-                [0, 4, 2, 6], [0, 0, 0, 4],
-                [0, 4, 0, 4], [0, 4, 0, 4],
-                [0, 4, 0, 4]]
-    rules = [[32, 36, 32, 36, 33, 35, 33, 34], [32, 36, 32, 36, 33, 37, 33, 34],
-             [38, 36, 38, 36, 39, 40, 39, 34], [38, 36, 38, 36, 39, 40, 39, 34]]
-    palette = pal_load("/Palettes/grass.pal")
-    rpalette = [(0, 0, 0), (255, 255, 255), (255, 225, 225), (255, 200, 200), (255, 100, 100), (255, 150, 150)]
-    bpalette = [(0, 0, 0), (255, 255, 255), (225, 225, 255), (200, 200, 255), (100, 100, 255), (150, 150, 255)]
+
+    palette = pal_load("Palettes/grass.pal")
+    rpalette = pal_load("Palettes/snow.pal")
+    bpalette = pal_load("Palettes/summer.pal")
     for y in range(0, 22):
         screen.append([])
         for x in range(0, 27):
-            screen[y].append(AdaptiveMetaTile((x-1)*16, (y-1)*16, sheet, rpalette, [0, 0, 0, 0, 0, 0, 0, 0], posrules, " ", 0))
+            screen[y].append(AdaptiveMetaTile((x-1)*16, (y-1)*16, sheet, rpalette, [0, 0, 0, 0, 0, 0, 0, 0], tile_rules["wtop"][0], " ", 0))
     animmetatile = AnimatedMetaTile(0, 8, sheet, palette, (2, 3), "p", 6, swap=1, flipy=1, flipx=1)
     metatile = MetaTile(23*8, 8, sheet, bpalette, [1, 2, 1, 1, 2, 1], [0, 0, 4, 2, 2, 6], (3, 2), "e")
     animmetatile.addframe([[6, 7], [8, 9], [10, 11]])
@@ -348,14 +354,13 @@ if __name__ == "__main__":#technical demo code, just for showing off a bit of po
         if mouse[0] or mouse[1] or mouse[4] or mouse[5]:
             mouse[2], mouse[3] = pygame.mouse.get_pos()
             if mouse[0]:
-                screen[mouse[3]//(16*scale)+1][mouse[2]//(16*scale)+1] = AdaptiveMetaTile((mouse[2]//(16*scale))*(16), (mouse[3]//(16*scale))*(16), sheet, palette, rules, posrules, "p", 32)
+                screen[mouse[3]//(16*scale)+1][mouse[2]//(16*scale)+1] = AdaptiveMetaTile((mouse[2]//(16*scale))*(16), (mouse[3]//(16*scale))*(16), sheet, palette, tile_rules["plain"][1], tile_rules["plain"][0], "m", 0)
             if mouse[1]:
-                screen[mouse[3]//(16*scale)+1][mouse[2]//(16*scale)+1] = AdaptiveMetaTile((mouse[2]//(16*scale))*(16), (mouse[3]//(16*scale))*(16), sheet, rpalette, rules, posrules, "r", 32)
+                screen[mouse[3]//(16*scale)+1][mouse[2]//(16*scale)+1] = AdaptiveMetaTile((mouse[2]//(16*scale))*(16), (mouse[3]//(16*scale))*(16), sheet, palette, tile_rules["block"][1], tile_rules["block"][0], "p", 1)
             if mouse[4]:
-                screen[mouse[3]//(16*scale)+1][mouse[2]//(16*scale)+1] = AdaptiveMetaTile((mouse[2]//(16*scale))*(16), (mouse[3]//(16*scale))*(16), sheet, rpalette, [0, 0, 0, 0, 0, 0, 0, 0], posrules, " ", 0)
+                screen[mouse[3]//(16*scale)+1][mouse[2]//(16*scale)+1] = AdaptiveMetaTile((mouse[2]//(16*scale))*(16), (mouse[3]//(16*scale))*(16), sheet, rpalette, [0, 0, 0, 0, 0, 0, 0, 0], tile_rules["wtop"][0], " ", 0)
             if mouse[5]:
-                screen[mouse[3]//(16*scale)+1][mouse[2]//(16*scale)+1] = AdaptiveMetaTile((mouse[2]//(16*scale))*(16), (mouse[3]//(16*scale))*(16), sheet, bpalette, rules, posrules, "b", 32)
-
+                screen[mouse[3]//(16*scale)+1][mouse[2]//(16*scale)+1] = AdaptiveMetaTile((mouse[2]//(16*scale))*(16), (mouse[3]//(16*scale))*(16), sheet, bpalette, tile_rules["wtop"][1], tile_rules["wtop"][0], "p", 32)
             for y in range(0, 3):
                 for x in range(0, 3):
                     screen[(mouse[3]//(16*scale)+y)][(mouse[2]//(16*scale)+x)].tile(screen)

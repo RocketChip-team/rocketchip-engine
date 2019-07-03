@@ -1,5 +1,5 @@
 from copy import copy
-from Tile import *
+from Scripts.Tile import *
 
 
 class GameObject:
@@ -14,8 +14,8 @@ class GameObject:
         else:
             indexes = []
             flips = []
-            for y in range(size[1]):
-                for x in range(size[0]):
+            for y in range(0, size[1]):
+                for x in range(0, size[0]):
                     indexes.append(0)
                     flips.append(0)
             self.sprite = MetaTile(0, 0, sheet, palette, indexes, flips, size, tag)
