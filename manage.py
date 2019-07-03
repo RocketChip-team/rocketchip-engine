@@ -40,7 +40,7 @@ class Manager():
      \033[33;1m-+@MM; SM@@MH+-,;XMMMM@MMMM@+-\033[0m       \033[1mRAM memory:\033[0m""", getRAMinfo()[0] ,"""
     \033[33;1m;@M@@M- XM@X;. -+XXXXXHHH@M@M#@/.\033[0m     \033[1mOS:\033[0m""", platform.system() ,"""
   \033[33;1m,%MM@@MH ,@%=            .---=-=:=,.\033[0m    \033[1m(c) Rocket chip 2019\033[0m
-  \033[33;1m=@#@@@MX .,              -%HXSS%%%+;\033[0m    
+  \033[33;1m=@#@@@MX .,              -%HXSS%%%+;\033[0m
  \033[33;1m=-./@M@MS                  .;@MMMM@MM:\033[0m  \033[7m  Project Monitor                     \033[0m
  \033[33;1mX@/ -SMM/                    .+MM@@@MS\033[0m
 \033[33;1m,@M@H: :@:                    . =X#@@@@-\033[0m  \033[1mProject name:\033[0m      """+project_name+"""        
@@ -116,5 +116,6 @@ class Manager():
         except IndexError:
             self.short_help()
 
+if __name__ ="__name__"
 manager = Manager(sys.argv)
 manager.execute()
