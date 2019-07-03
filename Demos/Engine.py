@@ -1,4 +1,3 @@
-#! /usr/bin/python2
 from Scripts.Controller import *
 from Scripts.GameObject import *
 from Scripts.FogLight import *
