@@ -57,6 +57,7 @@ class Main:
 			file.write("this data and the programs associated with it are made by Team Rocket Chip, DON'T STEAL THEM, and credit me")
 		except:
 			pass
+
 	def new(self):
 		data = []
 		for y in range(0,128):
