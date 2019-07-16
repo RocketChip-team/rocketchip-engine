@@ -1,3 +1,5 @@
+#DISCONTINUED PROGRAM, IF YOU FIND UTILITY TO IT, THAT'S GOOD FOR YOU
+
 import os, sys
 
 class Main:
@@ -5,7 +7,10 @@ class Main:
         self.data = self.new()
         self.max = 1
         self.min = 1
+        self.dis = 1
         self.corner = 2
+        self.offx = 1
+        self.offy = 1
         self.RUNNING = True
 
         if len(argv):
@@ -18,15 +23,13 @@ class Main:
         self.data = self.new()
         for y in range(0, 8):
             for x in range(0, 8):
-                if y < self.corner:
-                    if x >= self.corner and x <= 7+self.corner:
-                        self.data[y][x] = 3
-                elif x < self.corner:
-                    if y >= self.corner and y <= 7+self.corner:
-                        self.data[y][x] = 3
-                else:
-                    if x >= self.corner and y >= self.corner and x <= 7+self.corner and y <= 7+self.corner:
+                if y+x-self.goffx-self.goffy > self.corner and (x > self.goffx and y > self.goffy):
                         self.data[y][x] = 2
+                elif x+y-self.goffx-self.goffy >= self.corner and (x > self.goffx-1 and y > self.goffy-1):
+                        self.data[y][x] = 3
+        height = self.min
+        for x in range(0, 8):
+
 
     def new(self):
         data = []
@@ -49,7 +52,7 @@ class Main:
             pass
 
 if __name__ == "__main__":
-    if len(sys.argv):
+    if sys.argv:
         if sys.argv[1] == "-c":
             Main(True)
 

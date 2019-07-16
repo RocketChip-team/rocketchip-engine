@@ -31,6 +31,11 @@ class Main:
 		pygame.display.set_caption("Sprite Editor")
 		self.clock = pygame.time.Clock()
 		self.data = self.new()
+		self.buffer = []
+		for y in range(0,8):
+			self.buffer.append([])
+			for x in range(0,8):
+				self.buffer[y].append(0)
 		self.mouse = [0, 0]
 		self.currentsprite = [0, 0]
 		self.color = 1
@@ -65,6 +70,22 @@ class Main:
 			for x in range(0,128):
 				data[y].append(0)
 		return data
+
+	def copy(self, x, y):
+		for i in range(0, 8):
+			for j in range(0,8):
+				self.buffer[i][j] = self.data[y+i][x+j]
+
+	def paste(self, x, y):
+		for i in range(0, 8):
+			for j in range(0,8):
+				self.data[i+y][j+x] = self.buffer[i][j]
+
+	def cut(self, x, y):
+		for i in range(0, 8):
+			for j in range(0,8):
+				self.buffer[i][j] = self.data[y+i][x+j]
+				self.data[y+i][x+j] = 0
 
 	def open(self):
 		root = Tk()
@@ -117,6 +138,14 @@ class Main:
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_ESCAPE:
 					self.RUNNING = False
+				if pygame.key.get_mods()&pygame.KMOD_CTRL and event.key == pygame.K_c:
+					self.copy(self.currentsprite[0]*8, self.currentsprite[1]*8)
+
+				if pygame.key.get_mods()&pygame.KMOD_CTRL and event.key == pygame.K_v:
+					self.paste(self.currentsprite[0]*8, self.currentsprite[1]*8)
+
+				if pygame.key.get_mods()&pygame.KMOD_CTRL and event.key == pygame.K_x:
+					self.cut(self.currentsprite[0]*8, self.currentsprite[1]*8)
 			if event.type == pygame.MOUSEBUTTONDOWN:
 				if event.button == 4:
 					self.color -= 1
@@ -171,7 +200,7 @@ class Main:
 	def refresh(self):
 		for y in range(0, 128):
 			for x in range(0, 128):
-				pygame.draw.rect(self.minimap, self.palette[self.data[y][x]], (x, y, 1, 1))
+				self.minimap.set_at((x, y), self.palette[self.data[y][x]])
 	def draw(self):
 		self.display.fill(self.palette[0])
 		#draw buttons
@@ -183,11 +212,11 @@ class Main:
 		#draw minimap
 		for y in range(self.currentsprite[1]*8, (self.currentsprite[1]*8)+8):
 			for x in range(self.currentsprite[0]*8, (self.currentsprite[0]*8)+8):
-				pygame.draw.rect(self.minimap, self.palette[self.data[y][x]], (x, y, 1, 1))
+				self.minimap.set_at((x, y), self.palette[self.data[y][x]])
 		
 		for y in range(self.currentsprite[1]*8, (self.currentsprite[1]*8)+8):
 			for x in range(self.currentsprite[0]*8, (self.currentsprite[0]*8)+8):
-				pygame.draw.rect(self.editor, self.palette[self.data[y][x]], (x-self.currentsprite[0]*8, y-self.currentsprite[1]*8, 1, 1))
+				self.editor.set_at((x-self.currentsprite[0]*8, y-self.currentsprite[1]*8), self.palette[self.data[y][x]])
 		
 		pygame.draw.rect(self.display, (255, 255, 255), (18, 118, 260, 260))
 		pygame.draw.rect(self.display, (255, 255, 255), (342, 118, self.editor.get_rect().w*32+4, self.editor.get_rect().h*32+4))
