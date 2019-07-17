@@ -2,3 +2,5 @@ Engine.pyc
 .pythonversion
 __pycache__
 .idea
+.vscode
+Demos/__pycache__
