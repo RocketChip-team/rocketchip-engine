@@ -5,7 +5,7 @@ from gi.repository import Gtk, GdkPixbuf, Gdk
 
 class Handler:
     def __init__(self):
-        self.data = [(255, 255, 255),(255, 255, 255),(255, 255, 255),(255, 255, 255),(255, 255, 255),(255, 255, 255),(255, 255, 255),(255, 255, 255)]
+        self.data = [(0, 0, 0),(0, 0, 0),(0, 0, 0),(0, 0, 0),(0, 0, 0),(0, 0, 0),(0, 0, 0),(0, 0, 0)]
         self.file_path = None
 
     def onDestroy(self, *args):
@@ -23,7 +23,7 @@ class Handler:
         self.file_path = None
         self.data = []
         for y in range(1, 9):
-            self.data.append((255, 255, 255))
+            self.data.append((0, 0, 0))
 
     def open_file(self, path):
         with open(path, "r") as file:
