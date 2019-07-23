@@ -1,6 +1,7 @@
 from Scripts.Controller import *
 from Scripts.GameObject import *
 from Scripts.FogLight import *
+from Scripts.Collider import *
 
 class Game:
     def __init__(self, width, ratio, background, fps, title, sheet, scale=1, gravity=0):
