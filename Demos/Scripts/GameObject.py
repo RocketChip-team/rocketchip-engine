@@ -20,6 +20,7 @@ class GameObject:
                     flips.append(0)
             self.sprite = MetaTile(0, 0, sheet, palette, indexes, flips, size, tag)
         self.colliders = []
+        self.collisions = []
         self.controller = None
         self.light = None
         self.behaviours = behaviours
@@ -46,11 +47,14 @@ class GameObject:
         if self.controller:
             self.controller.update(game.levents)
         if self.colliders:
+            self.collisions = []
             for box in self.colliders:
                 for obj in game.objectlist:
                     if hasattr(obj, "colliders"):
                         for obox in obj.colliders:
-                            pass
+                            collision = box.detect(obox)
+                            if collision[0]:
+                                self.collisions.append(collision)
 
         for i in self.behnames:
             exec(self.behaviours[i])

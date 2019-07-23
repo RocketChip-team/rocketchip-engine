@@ -57,9 +57,7 @@ class Sheet:#graphics holder and drawer class
                         s = -s
                     if flipy:
                         t = -t
-                surf.set_at((b, a), palette[self.data[int((index & 240) / 2)+7*l+ t][int((index & 15) * 8)+7*f+ s]])#the lower and gets pixel data with it
-
-        surface.blit(surf, (x, y))#blits the temporary surface to the given surface as well as scaling it up, for speed
+                surface.set_at((b+x, a+y), palette[self.data[int((index & 240) / 2)+7*l+ t][int((index & 15) * 8)+7*f+ s]])#the lower and gets pixel data with it
 
 class Tile:#Basic tile class, a tile can ONLY be 8x8 pixels
     def __init__(self, x, y, sheet, palette, index, tag, flipx=0, flipy=0, swap=0):

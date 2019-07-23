@@ -11,6 +11,11 @@ if self.controller:
 if self.y > game.width:
     self.vy = -10
 
+for c in self.collisions:
+    if c[1] == "b":
+        self.x = game.WIDTH//4
+        self.y = game.HEIGHT//4
+
 self.x += self.vx
 self.y += self.vy
 self.vy += game.gravity
