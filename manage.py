@@ -266,7 +266,20 @@ class GameObject:
         self.sprite.draw(self.surface)
         surface.blit(self.surface, (self.x, self.y))"""
 
-Default_file = """import Engine.py
+Default_file = """from Engine import *
+
+if __name__ == "__main__":
+    sheet = Sheet("Sheets/path/to/your/sheet")
+    game = Game(10*16, 4/5.0, (255, 255, 255), 60, "Your window title", sheet, scale=2)
+    game.fog_instensity = 0
+    palette = pal_load("Palettes/path/to/your/palette")
+
+    while game.RUNNING:
+        game.events()
+        game.update()
+        game.draw()
+    pygame.quit()
+    quit()
 """
 Tile = """import pygame, random, math
 #sprite editor furnished with this program
@@ -663,6 +676,41 @@ if __name__ == "__main__":#technical demo code, just for showing off a bit of po
 #this program was made ENTIERLY by Geek_Joystick, DON'T STEAL IT, and credit me.
 """
 
+
+FogLight = """import pygame
+
+class FogLight:
+    def __init__(self, object, radius):
+        self.object = object
+        self.radius = radius
+        self.intensity = 255
+        self.surface = pygame.Surface((radius*2, radius*2), pygame.SRCALPHA)
+
+    def draw(self, surface):
+        self.surface.fill((0, 0, 0))
+        for i in range(8, 0, -1):
+            pygame.draw.circle(self.surface, (0, 0, 0, int((self.intensity/8)*i)), (self.radius, self.radius), int(self.radius/8)+int((self.radius/16/8)*i-1))
+        surface.blit(self.surface, (self.object.x+int(self.object.sprite.size[0]/2*8)-self.radius, self.object.y+int(self.object.sprite.size[0]/2*8)-self.radius), special_flags=pygame.BLEND_RGBA_MIN)
+"""
+Log = """class Log:
+    def __init__(self, filename):
+        self.filename = filename
+        self.file = open(filename, "w")
+
+    def start_text(self):
+        self.addentry("log started")
+        pass #TODO
+
+    def submiterror(self, err, function="unknown"):
+        self.file.write("Erreur in " + function + "() function > " + err + "\n")
+
+    def addentry(self, text):
+        self.file.write(text + "\n")
+
+    def end(self):
+        self.file.close()
+"""
+
 #End of files contebt
 
 #begining of the manager code
@@ -739,6 +787,10 @@ class Manager():
             readme.write(Controller)
         with open(self.project_name + "/Scripts/Tile.py", "w") as readme:
             readme.write(Tile)
+        with open(self.project_name + "/Scripts/FogLight.py", "w") as readme:
+            readme.write(FogLight)
+        with open(self.project_name + "/Scripts/Log.py", "w") as readme:
+            readme.write(Log)
 
     def shell(self):
         RUNNING = True
