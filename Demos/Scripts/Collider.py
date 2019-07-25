@@ -1,4 +1,5 @@
 import pygame
+from Scripts.Collision import *
 
 
 class Collider:
@@ -22,8 +23,9 @@ class Collider:
         self.box.x = self.parent.x
         self.box.y = self.parent.y
         if self.active and collider.active and collider.tag in self.tags and not collider == self:
-            return self.box.colliderect(collider.box), collider.tag
-        return 0, ""
+            if self.box.colliderect(collider.box):
+                return Collision([self.box.x, self.box.y], [collider.box.x, collider.box.y], collider.tag, [id(self), id(collider)])
+        return None
 
     def resolve(self, object):
         pass
