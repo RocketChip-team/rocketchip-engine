@@ -159,6 +159,9 @@ class MetaTile:#the basic metatile class, can be of any size
             self.tiles[i].palette = palette
         self.drawtiles()
 
+    def update(self, game):
+        pass
+
     def drawtiles(self):#pre-render tiles
         self.surface.fill((0, 0, 0, 0))
         for i in range(len(self.tiles)):

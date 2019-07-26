@@ -3,7 +3,7 @@ from Scripts.Tile import *
 
 
 class GameObject:
-    def __init__(self, x, y, sheet, palette, size, animated, tag, behaviours, latency=5):
+    def __init__(self, x, y, sheet, palette, size, animated, tag, behaviours, latency=5, ignore_off_bounds=False):
         self.x = x
         self.y = y
         self.vx = 0
@@ -28,6 +28,7 @@ class GameObject:
         self.behnames = self.behaviours.keys()
         self.surface = pygame.Surface((size[0]*8, size[1]*8), pygame.SRCALPHA)
         self.tag = tag
+        self.ignore_off_bounds = ignore_off_bounds
 
     def test_collision_stay(self, tag):
         for c in self.collisions:
@@ -72,12 +73,13 @@ class GameObject:
             self.oldcollisions = self.collisions
             newcoll = []
             for box in self.colliders:
-                for obj in game.objectlist:
-                    if hasattr(obj, "colliders"):
-                        for obox in obj.colliders:
-                            collision = box.detect(obox)
-                            if not collision == None:
-                                newcoll.append(collision)
+                for layer in game.objectlist:
+                    for obj in layer:
+                        if hasattr(obj, "colliders"):
+                            for obox in obj.colliders:
+                                collision = box.detect(obox)
+                                if not collision == None:
+                                    newcoll.append(collision)
             r = 0
             for i in range(len(newcoll)):
                 for j in range(len(self.collisions)):
@@ -91,7 +93,7 @@ class GameObject:
         for i in self.behnames:
             exec(self.behaviours[i])
         if self.light:
-            self.light.draw(game.fog)
+            self.light.draw(game.fog, game.fog_color)
 
     def draw(self, surface):
         self.surface.fill((0,0,0,0))

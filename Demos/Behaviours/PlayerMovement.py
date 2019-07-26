@@ -16,17 +16,16 @@ if self.y > game.width:
     self.vy = -10
 
 if self.test_collision_enter("b"):
-    print("yes respawn")
     self.x = game.WIDTH//4
     self.y = game.HEIGHT//4
 
-if self.test_collision_stay("t"):
-    print("It's hot!!!")
+if self.test_collision_enter("t"):
     self.sprite.setpalette(pal_load("Palettes/torch.pal"))
+    self.light.change_radius(500, 15, 512)
 
 if self.test_collision_quit("t"):
-    print("Hooo that's better.")
     self.sprite.setpalette(pal_load("Palettes/palette.pal"))
+    self.light.change_radius(400, 15, 412)
 
 
 self.x += self.vx
